@@ -98,8 +98,10 @@ class UpdateBrandingRequest extends FormRequest
 
         if ($failures !== []) {
             throw ValidationException::withMessages([
-                'contrast' => ['WCAG contrast check failed:']
-                    + $failures,
+                'contrast' => [
+                    'WCAG contrast check failed:',
+                    ...$failures,
+                ],
             ]);
         }
     }

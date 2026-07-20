@@ -179,6 +179,11 @@
         padding-right: 1rem !important;
         border-bottom: 1px solid var(--border) !important;
         background-color: var(--background) !important;
+        background-image:
+            linear-gradient(color-mix(in srgb, var(--background) 88%, transparent), color-mix(in srgb, var(--background) 88%, transparent)),
+            var(--branding-banner-image) !important;
+        background-position: center !important;
+        background-size: cover !important;
         position: relative !important;
         z-index: 30 !important;
     }
@@ -202,6 +207,38 @@
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
+    }
+
+    .admin-shell [data-slot="sidebar-footer"] {
+        background-color: var(--sidebar-footer, var(--sidebar)) !important;
+    }
+
+    .admin-shell .btn-primary {
+        --bs-btn-bg: var(--branding-button);
+        --bs-btn-border-color: var(--branding-button);
+        --bs-btn-hover-bg: color-mix(in srgb, var(--branding-button) 84%, black);
+        --bs-btn-hover-border-color: color-mix(in srgb, var(--branding-button) 78%, black);
+        --bs-btn-active-bg: color-mix(in srgb, var(--branding-button) 72%, black);
+        --bs-btn-active-border-color: color-mix(in srgb, var(--branding-button) 68%, black);
+    }
+
+    .admin-shell .table > thead,
+    .admin-shell table:not(.live-preview-table) > thead {
+        --bs-table-bg: var(--branding-table-header);
+        --bs-table-color: var(--branding-table-header-text);
+        background-color: var(--branding-table-header) !important;
+        color: var(--branding-table-header-text) !important;
+    }
+
+    .admin-shell .table > :not(caption) > * > *,
+    .admin-shell table:not(.live-preview-table) > :not(caption) > * > * {
+        border-color: var(--branding-table-border) !important;
+    }
+
+    .admin-shell .table-hover > tbody > tr:hover > *,
+    .admin-shell table:not(.live-preview-table) > tbody > tr:hover > * {
+        --bs-table-hover-bg: var(--branding-table-hover);
+        background-color: var(--branding-table-hover) !important;
     }
 
     @media (min-width: 640px) {

@@ -44,9 +44,9 @@ return [
     'defaults' => [
         // Asset paths (original files under public/images/)
         'banner_path' => 'images/banner.png',
-        'opac_banner_path' => 'images/opac-banner.png',
-        'opac_logo_path' => 'images/opac-logo.png',
-        'opac_default_book_cover_path' => 'images/default-book-cover.png',
+        'opac_banner_path' => 'images/banner.png',
+        'opac_logo_path' => 'images/pantasLogo.png',
+        'opac_default_book_cover_path' => 'images/defaultBook.png',
         'sidebar_logo_path' => 'images/logo.png',
 
         // Sidebar brand text

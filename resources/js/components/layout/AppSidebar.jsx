@@ -69,7 +69,7 @@ const activeItemClass =
 const navButtonClass =
     'rounded-md transition-[color,background-color,box-shadow,border-color] duration-150';
 
-function developerSidebarStyle(branding) {
+function brandedSidebarStyle(branding) {
     if (!branding) {
         return undefined;
     }
@@ -83,6 +83,7 @@ function developerSidebarStyle(branding) {
         '--sidebar-accent-foreground': branding.sidebar_hover_text_color,
         '--sidebar-border': branding.sidebar_hover_background_color,
         '--sidebar-ring': branding.sidebar_active_color,
+        '--sidebar-footer': branding.sidebar_footer_background_color,
     };
 }
 
@@ -108,29 +109,25 @@ function closeMobileNav(isMobile, setOpenMobile) {
 function SidebarBrand({ isDeveloper = false }) {
     const { isMobile, setOpenMobile } = useSidebar();
     const { shellBranding } = useShellProps();
+    const branding = shellBranding ?? {};
+    const brandName = branding.sidebar_brand_name || 'Library System';
+    const brandSubtitle = branding.sidebar_brand_subtitle || '';
+    const logoUrl = branding.sidebar_logo_url || '/img/usm_logo_1954.png';
+    const homeUrl = isDeveloper ? '/developer/dashboard' : '/book';
 
-    if (isDeveloper) {
-        const branding = shellBranding ?? {};
-        const brandName = branding.sidebar_brand_name || 'Library System';
-        const brandSubtitle = branding.sidebar_brand_subtitle || '';
-        const logoUrl = branding.sidebar_logo_url || '/img/usm_logo_1954.png';
-
-        return (
-            <SidebarHeader className="relative overflow-hidden border-b border-sidebar-border/50 px-2 pb-3 pt-2">
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            size="lg"
-                            asChild
-                            className={cn(
-                                navButtonClass,
-                                'rounded-xl hover:bg-sidebar-accent/25 group-data-[collapsible=icon]:rounded-lg',
-                            )}
-                        >
-                            <a
-                                href="/developer/dashboard"
-                                onClick={() => closeMobileNav(isMobile, setOpenMobile)}
-                            >
+    return (
+        <SidebarHeader className="relative overflow-hidden border-b border-sidebar-border/50 px-2 pb-3 pt-2">
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarMenuButton
+                        size="lg"
+                        asChild
+                        className={cn(
+                            navButtonClass,
+                            'rounded-xl hover:bg-sidebar-accent/25 group-data-[collapsible=icon]:rounded-lg',
+                        )}
+                    >
+                            <a href={homeUrl} onClick={() => closeMobileNav(isMobile, setOpenMobile)}>
                                 <div className="flex aspect-square size-9 shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-md ring-1 ring-sidebar-primary/40">
                                     <img
                                         src={logoUrl}
@@ -146,58 +143,13 @@ function SidebarBrand({ isDeveloper = false }) {
                                         {brandName}
                                     </span>
                                     {brandSubtitle ? (
-                                        <span
-                                            className="truncate text-[11px]"
-                                            style={{ color: branding.sidebar_text_color }}
-                                        >
+                                        <span className="truncate text-[11px] text-sidebar-foreground/70">
                                             {brandSubtitle}
                                         </span>
                                     ) : null}
                                     <span className="truncate text-[10px] font-medium uppercase tracking-[0.12em] text-sidebar-primary/90">
-                                        Developer portal
+                                        {isDeveloper ? 'Developer portal' : 'Staff portal'}
                                     </span>
-                                </div>
-                            </a>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarHeader>
-        );
-    }
-
-    return (
-        <SidebarHeader className="relative overflow-hidden border-b border-sidebar-border/50 px-2 pb-3 pt-2">
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton
-                        size="lg"
-                        asChild
-                        className={cn(
-                            navButtonClass,
-                            'rounded-xl hover:bg-sidebar-accent/25 group-data-[collapsible=icon]:rounded-lg',
-                        )}
-                    >
-                        <a
-                            href="/book"
-                            onClick={() => closeMobileNav(isMobile, setOpenMobile)}
-                        >
-                            <div className="flex aspect-square size-9 shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-md ring-1 ring-sidebar-primary/40">
-                                <img
-                                    src="/img/usm_logo_1954.png"
-                                    alt="University of Southern Mindanao"
-                                    className="size-full rounded-full object-contain"
-                                />
-                            </div>
-                            <div className="grid min-w-0 flex-1 text-left leading-tight group-data-[collapsible=icon]:hidden">
-                                <span className="truncate text-sm font-semibold tracking-tight">
-                                    PANTAS
-                                </span>
-                                <span className="truncate text-[11px] text-sidebar-foreground/70">
-                                    USM Library
-                                </span>
-                                <span className="truncate text-[10px] font-medium uppercase tracking-[0.12em] text-sidebar-primary/90">
-                                    Staff portal
-                                </span>
                             </div>
                         </a>
                     </SidebarMenuButton>
@@ -208,8 +160,9 @@ function SidebarBrand({ isDeveloper = false }) {
 }
 
 function SidebarUserPanel() {
-    const { auth } = useShellProps();
+    const { auth, shellBranding } = useShellProps();
     const user = auth?.user;
+    const brandName = shellBranding?.sidebar_brand_name || 'Library System';
 
     if (!user) {
         return null;
@@ -248,7 +201,7 @@ function SidebarUserPanel() {
                 </div>
             </a>
             <p className="px-2 text-center text-[10px] text-sidebar-foreground/50 group-data-[collapsible=icon]:hidden">
-                Pantas © {new Date().getFullYear()} · University of Southern Mindanao
+                {brandName} © {new Date().getFullYear()}
             </p>
         </SidebarFooter>
     );
@@ -360,7 +313,7 @@ export function AppSidebar({ ...props }) {
     return (
         <Sidebar
             collapsible="icon"
-            style={isDeveloper ? developerSidebarStyle(shellBranding) : undefined}
+            style={brandedSidebarStyle(shellBranding)}
             {...props}
         >
             <SidebarBrand isDeveloper={isDeveloper} />

@@ -43,12 +43,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'branding' => [
                 'cssPath' => config('branding.css_path'),
-                'tokens' => [
-                    'blue' => '#1f4ea7',
-                    'green' => '#2e7d32',
-                    'gold' => '#ffd700',
-                    'maroon' => '#932c27',
-                ],
+                'tokens' => $shellProps['shellBranding'],
             ],
             'routeName' => fn () => $shellProps['routeName'],
             'auth' => fn () => $shellProps['auth'],

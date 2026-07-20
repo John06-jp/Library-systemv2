@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+@php
+    $brandingService = app(\App\Services\BrandingService::class);
+    $opacBranding = $brandingService->active();
+    $opacLogoUrl = $brandingService->assetUrl('opac_logo_path');
+    $opacBannerUrl = $brandingService->assetUrl('opac_banner_path');
+    $opacDefaultCoverUrl = $brandingService->assetUrl('opac_default_book_cover_path');
+@endphp
 
 <head>
     <meta charset="UTF-8">
@@ -10,6 +17,34 @@
     <link rel="stylesheet" href="{{ asset('css/books/landing.css') }}">
     <link rel="stylesheet" href="{{ asset('css/site-responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('css/brand-typography.css') }}">
+    <style>
+        :root {
+            --opac-primary: {{ $opacBranding['primary_color'] }};
+            --opac-secondary: {{ $opacBranding['secondary_color'] }};
+            --opac-accent: {{ $opacBranding['accent_color'] }};
+            --opac-button: {{ $opacBranding['button_color'] }};
+        }
+        .opac-public-header,
+        .opac-search-header { border-color: var(--opac-primary) !important; }
+        .opac-nav-link,
+        .opac-search-title { color: var(--opac-secondary) !important; }
+        .opac-nav-link:hover,
+        .opac-nav-link:focus,
+        .opac-search-kicker,
+        .opac-hero-kicker { color: var(--opac-primary) !important; }
+        .opac-hero-search {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .86), rgba(255, 255, 255, .86)),
+                url('{{ $opacBannerUrl }}') !important;
+            background-position: center !important;
+            background-size: cover !important;
+        }
+        .opac-search-btn,
+        .opac-hero-search-btn {
+            background-color: var(--opac-button) !important;
+            border-color: var(--opac-button) !important;
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/qz-tray/qz-tray.js"></script>
 </head>
 
@@ -18,7 +53,7 @@
         <header class="opac-search-header" role="banner">
             <div class="opac-search-header-inner">
                 <a href="{{ route('landing') }}" class="opac-search-brand text-decoration-none">
-                    <img class="opac-search-logo" src="{{ asset('images/d.png') }}" alt="Library logo">
+                    <img class="opac-search-logo" src="{{ $opacLogoUrl }}" alt="Library logo">
                     <div class="opac-search-brand-text">
                         <span class="opac-search-kicker">Online Public Access Catalog</span>
                         <span class="opac-search-title">Governor Generoso College of Arts, Sciences and Technology</span>
@@ -52,7 +87,7 @@
         <header class="opac-public-header opac-header-bar">
             <div class="logo opac-logo-wrap">
                 <a href="{{ route('landing') }}" class="text-decoration-none text-dark d-inline-flex align-items-center">
-                    <img src="{{ asset('images/pantasLogo.png') }}" alt="Library Logo">
+                    <img src="{{ $opacLogoUrl }}" alt="Library Logo">
                 </a>
             </div>
             <nav class="opac-top-nav" aria-label="Quick links">
@@ -114,7 +149,7 @@
                                 $cAvail = ($cMeta['is_available'] ?? false) ? 'Available' : 'Not Available';
                             @endphp
                             <div class="carosel"
-                                data-img="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : asset('images/defaultBook.png') }}"
+                                data-img="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : $opacDefaultCoverUrl }}"
                                 data-title="{{ $book->title_statement }}"
                                 data-author="{{ $book->main_author }}"
                                 data-note="{{ $book->general_note }}"
@@ -130,7 +165,7 @@
                                 onclick="openBookCard(this)">
 
                                 <div class="carosel-cover">
-                                    <img src="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : asset('images/defaultBook.png') }}"
+                                    <img src="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : $opacDefaultCoverUrl }}"
                                         alt="{{ $book->title_statement }}">
                                 </div>
                                 <p class="carosel-title">{{ $book->title_statement }}</p>
@@ -282,7 +317,7 @@
                            rel="noopener"
                            onclick="{{ $eb->link ? '' : 'return false;' }}">
                             <div class="opac-result-cover">
-                                <img src="{{ asset('images/defaultBook.png') }}" alt="">
+                                <img src="{{ $opacDefaultCoverUrl }}" alt="">
                             </div>
                             <div class="opac-result-meta">
                                 <div class="opac-result-title">
@@ -305,7 +340,7 @@
                 @else
                     @foreach ($books as $book)
                     <div class="opac-result-row"
-                        data-img="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : asset('images/defaultBook.png') }}"
+                        data-img="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : $opacDefaultCoverUrl }}"
                         data-title="{{ $book->title_statement }}"
                         data-author="{{ $book->main_author }}"
                         data-note="{{ $book->general_note }}"
@@ -320,7 +355,7 @@
                         data-course="{{ $book->course ?? '' }}"
                         onclick="openBookCard(this)">
                         <div class="opac-result-cover">
-                            <img src="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : asset('images/defaultBook.png') }}" alt="">
+                            <img src="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : $opacDefaultCoverUrl }}" alt="">
                         </div>
                         <div class="opac-result-meta">
                             <div class="opac-result-title">

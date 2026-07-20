@@ -13,15 +13,31 @@ export function AdminShellLayout({
     contentRef,
     children,
 }) {
-    const { auth } = useShellProps();
+    const { auth, shellBranding } = useShellProps();
     const isDeveloper = auth?.user?.isDeveloper ?? false;
     const breadcrumbs = isDeveloper
         ? resolveDeveloperBreadcrumbs(routeName, breadcrumbOverride)
         : resolveBreadcrumbs(routeName, breadcrumbOverride);
+    const branding = shellBranding ?? {};
+    const shellStyle = {
+        '--primary': branding.primary_color,
+        '--secondary': branding.secondary_color,
+        '--accent': branding.accent_color,
+        '--ring': branding.primary_color,
+        '--border': branding.table_border_color,
+        '--branding-button': branding.button_color,
+        '--branding-table-header': branding.table_header_color,
+        '--branding-table-header-text': branding.table_header_text_color,
+        '--branding-table-border': branding.table_border_color,
+        '--branding-table-hover': branding.table_hover_color,
+        '--branding-banner-image': branding.banner_url
+            ? `url("${branding.banner_url}")`
+            : 'none',
+    };
 
     return (
         <TooltipProvider>
-            <SidebarProvider className="admin-shell min-w-0 w-full">
+            <SidebarProvider className="admin-shell min-w-0 w-full" style={shellStyle}>
                 <AppSidebar />
                 <SidebarInset>
                     <AppHeader />

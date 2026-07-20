@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\BrandingService;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -25,6 +24,10 @@ class DashboardController extends Controller
         $branding = $this->branding->active();
         $originals = $this->branding->originals();
         $setting = $this->branding->setting();
+        $assetUrls = [
+            'banner_path' => $this->branding->assetUrl('banner_path'),
+            'sidebar_logo_path' => $this->branding->assetUrl('sidebar_logo_path'),
+        ];
 
         $customizedCount = 0;
         foreach ($branding as $field => $value) {
@@ -33,6 +36,6 @@ class DashboardController extends Controller
             }
         }
 
-        return view('dashboards.developer', compact('branding', 'originals', 'setting', 'customizedCount'));
+        return view('dashboards.developer', compact('branding', 'originals', 'setting', 'assetUrls', 'customizedCount'));
     }
 }

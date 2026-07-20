@@ -31,7 +31,7 @@ class AdminShell
     }
 
     /**
-     * Branding snapshot for the developer portal sidebar.
+     * System-wide branding snapshot consumed by every admin-shell role.
      *
      * @return array<string, string>
      */
@@ -42,9 +42,16 @@ class AdminShell
         $active = $service->active();
 
         return [
+            'banner_url' => $service->assetUrl('banner_path'),
+            'opac_banner_url' => $service->assetUrl('opac_banner_path'),
+            'opac_logo_url' => $service->assetUrl('opac_logo_path'),
+            'opac_default_book_cover_url' => $service->assetUrl('opac_default_book_cover_path'),
             'sidebar_logo_url' => $service->assetUrl('sidebar_logo_path'),
             'sidebar_brand_name' => (string) ($active['sidebar_brand_name'] ?? 'Library System'),
             'sidebar_brand_subtitle' => (string) ($active['sidebar_brand_subtitle'] ?? ''),
+            'primary_color' => (string) ($active['primary_color'] ?? '#2563EB'),
+            'secondary_color' => (string) ($active['secondary_color'] ?? '#475569'),
+            'accent_color' => (string) ($active['accent_color'] ?? '#F59E0B'),
             'sidebar_background_color' => (string) ($active['sidebar_background_color'] ?? '#1E293B'),
             'sidebar_text_color' => (string) ($active['sidebar_text_color'] ?? '#CBD5E1'),
             'sidebar_brand_text_color' => (string) ($active['sidebar_brand_text_color'] ?? '#FFFFFF'),
@@ -52,6 +59,11 @@ class AdminShell
             'sidebar_hover_background_color' => (string) ($active['sidebar_hover_background_color'] ?? '#334155'),
             'sidebar_hover_text_color' => (string) ($active['sidebar_hover_text_color'] ?? '#F8FAFC'),
             'sidebar_footer_background_color' => (string) ($active['sidebar_footer_background_color'] ?? '#1E293B'),
+            'button_color' => (string) ($active['button_color'] ?? '#2563EB'),
+            'table_header_color' => (string) ($active['table_header_color'] ?? '#1E293B'),
+            'table_header_text_color' => (string) ($active['table_header_text_color'] ?? '#F8FAFC'),
+            'table_border_color' => (string) ($active['table_border_color'] ?? '#E2E8F0'),
+            'table_hover_color' => (string) ($active['table_hover_color'] ?? '#F1F5F9'),
         ];
     }
 

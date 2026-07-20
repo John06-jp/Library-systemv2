@@ -40,7 +40,7 @@
                 <div class="col-md-6">
                     <label class="fw-semibold small text-muted">Sidebar Logo</label>
                     <div>
-                        <img src="{{ $branding['sidebar_logo_path'] ?? asset('images/logo.png') }}"
+                        <img src="{{ $assetUrls['sidebar_logo_path'] }}"
                              alt="Sidebar Logo" class="branding-preview-sm mt-1">
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                 <div class="col-md-6">
                     <label class="fw-semibold small text-muted">Application Banner</label>
                     <div>
-                        <img src="{{ $branding['banner_path'] ?? asset('images/banner.png') }}"
+                        <img src="{{ $assetUrls['banner_path'] }}"
                              alt="Banner" class="branding-preview mt-1">
                     </div>
                 </div>
