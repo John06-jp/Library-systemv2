@@ -16,6 +16,26 @@
     .sidebar-mockup .nav-item { padding: 0.4rem 0.6rem; border-radius: 6px; margin-bottom: 2px; font-size: 0.85rem; }
     .sidebar-mockup .nav-item.active { background: #3b82f6; color: #fff; }
     .sidebar-mockup .nav-item.hover { background: #334155; color: #f8fafc; }
+    .live-preview-shell { overflow: hidden; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; box-shadow: 0 8px 24px rgba(15, 23, 42, .08); }
+    .live-preview-banner { height: 90px; width: 100%; object-fit: cover; background: #e2e8f0; }
+    .live-preview-layout { display: grid; grid-template-columns: minmax(170px, 32%) 1fr; min-height: 330px; }
+    .live-preview-sidebar { display: flex; flex-direction: column; padding: 1rem 0 0; }
+    .live-preview-brand { display: flex; gap: .65rem; align-items: center; padding: 0 .85rem 1rem; }
+    .live-preview-logo { width: 42px; height: 42px; object-fit: contain; border-radius: 6px; background: rgba(255, 255, 255, .12); }
+    .live-preview-nav { padding: 0 .65rem; flex: 1; }
+    .live-preview-footer { margin-top: 1rem; padding: .75rem; font-size: .75rem; }
+    .live-preview-content { padding: 1rem; min-width: 0; }
+    .live-preview-table { width: 100%; border-collapse: collapse; font-size: .76rem; }
+    .live-preview-table th, .live-preview-table td { padding: .55rem; border: 1px solid; }
+    .live-preview-table tbody tr:nth-child(2) { transition: background-color .15s ease; }
+    .live-preview-button { border: 0; border-radius: 6px; color: #fff; padding: .45rem .8rem; font-size: .78rem; }
+    .live-preview-status { display: inline-flex; align-items: center; gap: .35rem; color: #64748b; font-size: .78rem; }
+    .live-preview-status::before { content: ''; width: 7px; height: 7px; border-radius: 999px; background: #22c55e; }
+    .asset-preview-pending { outline: 3px solid #f59e0b; outline-offset: 2px; }
+    @media (max-width: 767.98px) {
+        .live-preview-layout { grid-template-columns: 1fr; }
+        .live-preview-sidebar { min-height: 280px; }
+    }
 </style>
 @endsection
 
@@ -55,7 +75,7 @@
                 <div class="col-md-6">
                     <label class="fw-semibold small text-muted">Current Banner</label>
                     <div class="preview-box mt-1">
-                        <img src="{{ app(App\Services\BrandingService::class)->assetUrl('banner_path') }}" alt="Current Banner" class="preview-img-banner w-100">
+                        <img id="preview-asset-banner_path" src="{{ app(App\Services\BrandingService::class)->assetUrl('banner_path') }}" alt="Current Banner" class="preview-img-banner w-100">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -82,7 +102,7 @@
                 <div class="col-md-6">
                     <label class="fw-semibold small text-muted">Current OPAC Banner</label>
                     <div class="preview-box mt-1">
-                        <img src="{{ app(App\Services\BrandingService::class)->assetUrl('opac_banner_path') }}" alt="Current OPAC Banner" class="preview-img-banner w-100">
+                        <img id="preview-asset-opac_banner_path" src="{{ app(App\Services\BrandingService::class)->assetUrl('opac_banner_path') }}" alt="Current OPAC Banner" class="preview-img-banner w-100">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -109,7 +129,7 @@
                 <div class="col-md-6">
                     <label class="fw-semibold small text-muted">Current OPAC Logo</label>
                     <div class="preview-box mt-1">
-                        <img src="{{ app(App\Services\BrandingService::class)->assetUrl('opac_logo_path') }}" alt="Current OPAC Logo" class="preview-img">
+                        <img id="preview-asset-opac_logo_path" src="{{ app(App\Services\BrandingService::class)->assetUrl('opac_logo_path') }}" alt="Current OPAC Logo" class="preview-img">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -136,7 +156,7 @@
                 <div class="col-md-6">
                     <label class="fw-semibold small text-muted">Current Book Cover</label>
                     <div class="preview-box mt-1">
-                        <img src="{{ app(App\Services\BrandingService::class)->assetUrl('opac_default_book_cover_path') }}" alt="Current Book Cover" class="preview-img">
+                        <img id="preview-asset-opac_default_book_cover_path" src="{{ app(App\Services\BrandingService::class)->assetUrl('opac_default_book_cover_path') }}" alt="Current Book Cover" class="preview-img">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -163,7 +183,7 @@
                 <div class="col-md-6">
                     <label class="fw-semibold small text-muted">Current Sidebar Logo</label>
                     <div class="preview-box mt-1">
-                        <img src="{{ app(App\Services\BrandingService::class)->assetUrl('sidebar_logo_path') }}" alt="Current Sidebar Logo" class="preview-img">
+                        <img id="preview-asset-sidebar_logo_path" src="{{ app(App\Services\BrandingService::class)->assetUrl('sidebar_logo_path') }}" alt="Current Sidebar Logo" class="preview-img">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -213,13 +233,70 @@
             <h5>Color Palette</h5>
 
             {{-- Live Preview Mockup --}}
-            <div class="row g-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <div class="fw-semibold">Live Preview</div>
+                    <div class="live-preview-status">Updates instantly — save to publish</div>
+                </div>
+                <span class="badge bg-warning-subtle text-warning-emphasis">Unsaved preview</span>
+            </div>
+            <div class="live-preview-shell mb-4" id="branding-live-preview">
+                <img id="live-preview-banner"
+                     src="{{ app(App\Services\BrandingService::class)->assetUrl('banner_path') }}"
+                     alt="Application banner preview"
+                     class="live-preview-banner">
+                <div class="live-preview-layout">
+                    <aside id="sidebar-preview" class="sidebar-mockup live-preview-sidebar p-0 rounded-0"
+                           style="background-color: {{ $current['sidebar_background_color'] ?? '#1E293B' }};">
+                        <div class="live-preview-brand brand" style="color: {{ $current['sidebar_brand_text_color'] ?? '#FFFFFF' }};">
+                            <img id="live-preview-sidebar-logo"
+                                 src="{{ app(App\Services\BrandingService::class)->assetUrl('sidebar_logo_path') }}"
+                                 alt="Sidebar logo preview"
+                                 class="live-preview-logo">
+                            <div class="min-w-0">
+                                <div id="preview-brand-name">{{ $current['sidebar_brand_name'] ?? 'Library System' }}</div>
+                                <div id="preview-brand-subtitle" class="subtitle text-truncate"
+                                     style="color: {{ $current['sidebar_text_color'] ?? '#CBD5E1' }};">
+                                    {{ $current['sidebar_brand_subtitle'] ?? 'Knowledge Gateway' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="live-preview-nav">
+                            <div class="nav-item active">Dashboard</div>
+                            <div class="nav-item hover">Branding</div>
+                            <div class="nav-item standard">Version History</div>
+                        </div>
+                        <div id="live-preview-footer" class="live-preview-footer">Developer Console</div>
+                    </aside>
+                    <main class="live-preview-content">
+                        <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+                            <div>
+                                <div id="live-preview-heading" class="fw-bold">Branding overview</div>
+                                <div id="live-preview-secondary" class="small">Preview of system components</div>
+                            </div>
+                            <button id="live-preview-button" type="button" class="live-preview-button">Primary action</button>
+                        </div>
+                        <div id="live-preview-accent" class="rounded p-2 mb-3 small">Accent notification</div>
+                        <div class="table-responsive">
+                            <table id="live-preview-table" class="live-preview-table">
+                                <thead><tr><th>Asset</th><th>Status</th><th>Updated</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Banner</td><td>Active</td><td>Today</td></tr>
+                                    <tr id="live-preview-table-hover"><td>Sidebar logo</td><td>Active</td><td>Today</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </main>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3 d-none" aria-hidden="true">
                 <div class="col-md-6">
-                    <div class="sidebar-mockup" id="sidebar-preview" style="background-color: {{ $current['sidebar_background_color'] ?? '#1E293B' }};">
+                    <div class="sidebar-mockup" id="legacy-sidebar-preview" style="background-color: {{ $current['sidebar_background_color'] ?? '#1E293B' }};">
                         <div class="brand" style="color: {{ $current['sidebar_brand_text_color'] ?? '#FFFFFF' }};">
-                            <span id="preview-brand-name">{{ $current['sidebar_brand_name'] ?? 'Library System' }}</span>
+                            <span id="legacy-preview-brand-name">{{ $current['sidebar_brand_name'] ?? 'Library System' }}</span>
                             <div class="subtitle" style="color: {{ $current['sidebar_text_color'] ?? '#CBD5E1' }};">
-                                <span id="preview-brand-subtitle">{{ $current['sidebar_brand_subtitle'] ?? 'Knowledge Gateway' }}</span>
+                                <span id="legacy-preview-brand-subtitle">{{ $current['sidebar_brand_subtitle'] ?? 'Knowledge Gateway' }}</span>
                             </div>
                         </div>
                         <div class="mt-3">
@@ -380,38 +457,57 @@
         var sidebarPreview = document.getElementById('sidebar-preview');
         if (!sidebarPreview) return;
 
-        var bg = document.getElementById('sidebar_background_color');
-        if (bg) sidebarPreview.style.backgroundColor = bg.value;
-
-        var brandText = document.getElementById('sidebar_brand_text_color');
-        if (brandText) {
-            var brandEls = sidebarPreview.querySelectorAll('.brand');
-            brandEls.forEach(function (el) { el.style.color = brandText.value; });
+        function color(field, fallback) {
+            var input = document.getElementById(field);
+            return input && /^#[0-9A-Fa-f]{6}$/.test(input.value) ? input.value : fallback;
         }
 
-        var textColor = document.getElementById('sidebar_text_color');
-        if (textColor) {
-            var subtitleEls = sidebarPreview.querySelectorAll('.subtitle');
-            subtitleEls.forEach(function (el) { el.style.color = textColor.value; });
-            var navItems = sidebarPreview.querySelectorAll('.nav-item:not(.active):not(.hover)');
-            navItems.forEach(function (el) { el.style.color = textColor.value; });
-        }
+        var colors = {
+            primary: color('primary_color', '#2563EB'),
+            secondary: color('secondary_color', '#475569'),
+            accent: color('accent_color', '#F59E0B'),
+            sidebarBg: color('sidebar_background_color', '#1E293B'),
+            sidebarText: color('sidebar_text_color', '#CBD5E1'),
+            brandText: color('sidebar_brand_text_color', '#FFFFFF'),
+            active: color('sidebar_active_color', '#3B82F6'),
+            hoverBg: color('sidebar_hover_background_color', '#334155'),
+            hoverText: color('sidebar_hover_text_color', '#F8FAFC'),
+            button: color('button_color', '#2563EB'),
+            footer: color('sidebar_footer_background_color', '#0F172A'),
+            tableHeader: color('table_header_color', '#1E293B'),
+            tableHeaderText: color('table_header_text_color', '#F8FAFC'),
+            tableBorder: color('table_border_color', '#E2E8F0'),
+            tableHover: color('table_hover_color', '#F1F5F9')
+        };
 
-        var activeColor = document.getElementById('sidebar_active_color');
-        if (activeColor) {
-            var activeEl = sidebarPreview.querySelector('.nav-item.active');
-            if (activeEl) activeEl.style.backgroundColor = activeColor.value;
-        }
+        sidebarPreview.style.backgroundColor = colors.sidebarBg;
+        sidebarPreview.querySelector('.brand').style.color = colors.brandText;
+        sidebarPreview.querySelector('.subtitle').style.color = colors.sidebarText;
+        sidebarPreview.querySelector('.nav-item.standard').style.color = colors.sidebarText;
+        sidebarPreview.querySelector('.nav-item.active').style.backgroundColor = colors.active;
+        sidebarPreview.querySelector('.nav-item.hover').style.backgroundColor = colors.hoverBg;
+        sidebarPreview.querySelector('.nav-item.hover').style.color = colors.hoverText;
 
-        var hoverBg = document.getElementById('sidebar_hover_background_color');
-        var hoverText = document.getElementById('sidebar_hover_text_color');
-        if (hoverBg) {
-            var hoverEl = sidebarPreview.querySelector('.nav-item.hover');
-            if (hoverEl) {
-                hoverEl.style.backgroundColor = hoverBg.value;
-                if (hoverText) hoverEl.style.color = hoverText.value;
-            }
-        }
+        var footer = document.getElementById('live-preview-footer');
+        footer.style.backgroundColor = colors.footer;
+        footer.style.color = colors.sidebarText;
+
+        document.getElementById('live-preview-heading').style.color = colors.primary;
+        document.getElementById('live-preview-secondary').style.color = colors.secondary;
+        document.getElementById('live-preview-button').style.backgroundColor = colors.button;
+
+        var accent = document.getElementById('live-preview-accent');
+        accent.style.borderLeft = '4px solid ' + colors.accent;
+        accent.style.backgroundColor = colors.accent + '20';
+        accent.style.color = colors.secondary;
+
+        var table = document.getElementById('live-preview-table');
+        table.querySelector('thead').style.backgroundColor = colors.tableHeader;
+        table.querySelector('thead').style.color = colors.tableHeaderText;
+        table.querySelectorAll('th, td').forEach(function (cell) {
+            cell.style.borderColor = colors.tableBorder;
+        });
+        document.getElementById('live-preview-table-hover').style.backgroundColor = colors.tableHover;
 
         var brandName = document.getElementById('sidebar_brand_name');
         var previewName = document.getElementById('preview-brand-name');
@@ -420,13 +516,50 @@
         var brandSubtitle = document.getElementById('sidebar_brand_subtitle');
         var previewSubtitle = document.getElementById('preview-brand-subtitle');
         if (brandSubtitle && previewSubtitle) previewSubtitle.textContent = brandSubtitle.value || 'Knowledge Gateway';
+
+        document.querySelectorAll('.color-hex').forEach(function (input) {
+            var picker = document.getElementById(input.id + '-picker');
+            var swatch = picker ? picker.closest('.input-group-text') : null;
+            var valid = /^#[0-9A-Fa-f]{6}$/.test(input.value);
+            if (picker && valid) picker.value = input.value;
+            if (swatch && valid) swatch.style.backgroundColor = input.value;
+        });
     }
 
-    // Attach change listeners to all color inputs and text inputs
+    function previewUploadedAsset(input) {
+        var file = input.files && input.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+
+        if (input.dataset.previewUrl) URL.revokeObjectURL(input.dataset.previewUrl);
+        var objectUrl = URL.createObjectURL(file);
+        input.dataset.previewUrl = objectUrl;
+
+        var sectionPreview = document.getElementById('preview-asset-' + input.id);
+        if (sectionPreview) {
+            sectionPreview.src = objectUrl;
+            sectionPreview.classList.add('asset-preview-pending');
+        }
+
+        if (input.id === 'banner_path') {
+            document.getElementById('live-preview-banner').src = objectUrl;
+        }
+        if (input.id === 'sidebar_logo_path') {
+            document.getElementById('live-preview-sidebar-logo').src = objectUrl;
+        }
+    }
+
+    // Attach change listeners to all previewable inputs.
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.color-hex, input[type="color"], #sidebar_brand_name, #sidebar_brand_subtitle').forEach(function (el) {
             el.addEventListener('input', updatePreview);
         });
+
+        ['banner_path', 'opac_banner_path', 'opac_logo_path', 'opac_default_book_cover_path', 'sidebar_logo_path'].forEach(function (field) {
+            var input = document.getElementById(field);
+            if (input) input.addEventListener('change', function () { previewUploadedAsset(input); });
+        });
+
+        updatePreview();
     });
 </script>
 @endpush
