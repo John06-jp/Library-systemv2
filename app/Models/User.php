@@ -64,6 +64,26 @@ class User extends Authenticatable
         return trim("{$this->fname} {$this->lname}");
     }
 
+    public function getNameAttribute(): string
+    {
+        return $this->fullName();
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    /**
+     * @param  iterable<string>|string  $roles
+     */
+    public function hasAnyRole(iterable|string $roles, string ...$additionalRoles): bool
+    {
+        $roles = is_string($roles) ? [$roles, ...$additionalRoles] : $roles;
+
+        return in_array($this->role, is_array($roles) ? $roles : iterator_to_array($roles), true);
+    }
+
     public function initials(): string
     {
         return strtoupper(mb_substr((string) $this->fname, 0, 1).mb_substr((string) $this->lname, 0, 1));

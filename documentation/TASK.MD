@@ -20,9 +20,9 @@ Reference plan:
 
 ## Active Work
 
-- [ ] Start implementation of Developer role and branding system.
-- [ ] Create detailed implementation plan.
-- [ ] Create this task tracker.
+- [x] Start implementation of Developer role and branding system.
+- [x] Create detailed implementation plan.
+- [x] Create this task tracker.
 
 ## Confirmed Decisions
 
@@ -46,26 +46,26 @@ Reference plan:
 
 ### Milestone 1: Role Support And Services
 
-- [ ] Add `hasRole()` and `hasAnyRole()` methods to `app/Models/User.php`.
-- [ ] Add `getNameAttribute()` accessor returning `$this->fullName()`.
-- [ ] Create `app/Services/Auth/ModuleAccessService.php` with `isDeveloper()`, `hasLibraryAccess()`, etc.
-- [ ] Create `app/Services/ContrastValidator.php` — WCAG contrast ratio calculator.
-- [ ] Create `app/Services/ContrastRules.php` — WCAG contrast rule definitions for branding.
-- [ ] Create `app/Services/AssetOptimizer.php` — Image compression via Intervention Image.
-- [ ] Create `app/Services/BrandingService.php` — Core branding CRUD, caching, versioning, asset management.
+- [x] Add `hasRole()` and `hasAnyRole()` methods to `app/Models/User.php`.
+- [x] Add `getNameAttribute()` accessor returning `$this->fullName()`.
+- [x] Create `app/Services/Auth/ModuleAccessService.php` with `isDeveloper()`, `hasLibraryAccess()`, etc.
+- [x] Create `app/Services/ContrastValidator.php` — WCAG contrast ratio calculator.
+- [x] Create `app/Services/ContrastRules.php` — WCAG contrast rule definitions for branding.
+- [x] Create `app/Services/AssetOptimizer.php` — Image compression via Intervention Image.
+- [x] Create `app/Services/BrandingService.php` — Core branding CRUD, caching, versioning, asset management.
 
 ### Milestone 2: Database And Models
 
-- [ ] Create migration for `branding_settings` table (asset paths, text fields, color fields, updated_by, timestamps).
-- [ ] Create migration for `branding_versions` table (branding_setting_id, snapshot JSON, changed_by, created_at).
-- [ ] Run `php artisan migrate`.
-- [ ] Create `app/Models/BrandingSetting.php` with `updater()` BelongsTo relationship.
-- [ ] Create `app/Models/BrandingVersion.php` with `changer()` and `brandingSetting()` relationships, `$timestamps = false`, `snapshot` cast to array.
+- [x] Create migration for `branding_settings` table (asset paths, text fields, color fields, updated_by, timestamps).
+- [x] Create migration for `branding_versions` table (branding_setting_id, snapshot JSON, changed_by, created_at).
+- [x] Run `php artisan migrate`.
+- [x] Create `app/Models/BrandingSetting.php` with `updater()` BelongsTo relationship.
+- [x] Create `app/Models/BrandingVersion.php` with `changer()` and `brandingSetting()` relationships, `$timestamps = false`, `snapshot` cast to array.
 
 ### Milestone 3: Middleware And Authorization
 
-- [ ] Create `app/Http/Middleware/EnsureDeveloper.php` using `ModuleAccessService::isDeveloper()`.
-- [ ] Register `developer` middleware alias in `bootstrap/app.php`.
+- [x] Create `app/Http/Middleware/EnsureDeveloper.php` using `ModuleAccessService::isDeveloper()`.
+- [x] Register `developer` middleware alias in `bootstrap/app.php`.
 - [ ] Verify `admin` and `staff` roles receive `403` on developer routes.
 
 ### Milestone 4: Form Request And Controller
