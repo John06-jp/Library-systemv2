@@ -44,7 +44,6 @@ return [
     'defaults' => [
         // Asset paths (original files under public/images/)
         'banner_path' => 'images/banner.png',
-        'opac_banner_path' => 'images/banner.png',
         'opac_logo_path' => 'images/pantasLogo.png',
         'opac_default_book_cover_path' => 'images/defaultBook.png',
         'sidebar_logo_path' => 'images/logo.png',
@@ -57,6 +56,8 @@ return [
         'primary_color' => '#2563EB',
         'secondary_color' => '#475569',
         'accent_color' => '#F59E0B',
+        'opac_gradient_start_color' => '#2E7D32',
+        'opac_gradient_end_color' => '#1B5E20',
         'sidebar_background_color' => '#1E293B',
         'sidebar_text_color' => '#CBD5E1',
         'sidebar_brand_text_color' => '#FFFFFF',

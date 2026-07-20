@@ -24,7 +24,7 @@ class DeveloperBrandingController extends Controller
     public function update(UpdateBrandingRequest $request)
     {
         $uploads = [];
-        $assetFields = ['banner_path', 'opac_banner_path', 'opac_logo_path', 'opac_default_book_cover_path', 'sidebar_logo_path'];
+        $assetFields = ['banner_path', 'opac_logo_path', 'opac_default_book_cover_path', 'sidebar_logo_path'];
 
         foreach ($assetFields as $field) {
             if ($request->hasFile($field)) {

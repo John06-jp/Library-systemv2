@@ -43,7 +43,6 @@ class AdminShell
 
         return [
             'banner_url' => $service->assetUrl('banner_path'),
-            'opac_banner_url' => $service->assetUrl('opac_banner_path'),
             'opac_logo_url' => $service->assetUrl('opac_logo_path'),
             'opac_default_book_cover_url' => $service->assetUrl('opac_default_book_cover_path'),
             'sidebar_logo_url' => $service->assetUrl('sidebar_logo_path'),
@@ -52,6 +51,8 @@ class AdminShell
             'primary_color' => (string) ($active['primary_color'] ?? '#2563EB'),
             'secondary_color' => (string) ($active['secondary_color'] ?? '#475569'),
             'accent_color' => (string) ($active['accent_color'] ?? '#F59E0B'),
+            'opac_gradient_start_color' => (string) ($active['opac_gradient_start_color'] ?? '#2E7D32'),
+            'opac_gradient_end_color' => (string) ($active['opac_gradient_end_color'] ?? '#1B5E20'),
             'sidebar_background_color' => (string) ($active['sidebar_background_color'] ?? '#1E293B'),
             'sidebar_text_color' => (string) ($active['sidebar_text_color'] ?? '#CBD5E1'),
             'sidebar_brand_text_color' => (string) ($active['sidebar_brand_text_color'] ?? '#FFFFFF'),

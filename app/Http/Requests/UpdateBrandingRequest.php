@@ -22,7 +22,6 @@ class UpdateBrandingRequest extends FormRequest
         return [
             // Asset fields
             'banner_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
-            'opac_banner_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'opac_logo_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'opac_default_book_cover_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'sidebar_logo_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -35,6 +34,8 @@ class UpdateBrandingRequest extends FormRequest
             'primary_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
             'secondary_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
             'accent_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
+            'opac_gradient_start_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
+            'opac_gradient_end_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
             'sidebar_background_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
             'sidebar_text_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
             'sidebar_brand_text_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
@@ -54,6 +55,7 @@ class UpdateBrandingRequest extends FormRequest
     {
         $colorFields = [
             'primary_color', 'secondary_color', 'accent_color',
+            'opac_gradient_start_color', 'opac_gradient_end_color',
             'sidebar_background_color', 'sidebar_text_color', 'sidebar_brand_text_color',
             'sidebar_active_color', 'sidebar_hover_background_color', 'sidebar_hover_text_color',
             'button_color', 'sidebar_footer_background_color',

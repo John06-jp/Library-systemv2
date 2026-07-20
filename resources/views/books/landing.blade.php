@@ -4,7 +4,6 @@
     $brandingService = app(\App\Services\BrandingService::class);
     $opacBranding = $brandingService->active();
     $opacLogoUrl = $brandingService->assetUrl('opac_logo_path');
-    $opacBannerUrl = $brandingService->assetUrl('opac_banner_path');
     $opacDefaultCoverUrl = $brandingService->assetUrl('opac_default_book_cover_path');
 @endphp
 
@@ -23,6 +22,8 @@
             --opac-secondary: {{ $opacBranding['secondary_color'] }};
             --opac-accent: {{ $opacBranding['accent_color'] }};
             --opac-button: {{ $opacBranding['button_color'] }};
+            --opac-gradient-start: {{ $opacBranding['opac_gradient_start_color'] ?? '#2E7D32' }};
+            --opac-gradient-end: {{ $opacBranding['opac_gradient_end_color'] ?? '#1B5E20' }};
         }
         .opac-public-header,
         .opac-search-header { border-color: var(--opac-primary) !important; }
@@ -30,14 +31,13 @@
         .opac-search-title { color: var(--opac-secondary) !important; }
         .opac-nav-link:hover,
         .opac-nav-link:focus,
-        .opac-search-kicker,
-        .opac-hero-kicker { color: var(--opac-primary) !important; }
+        .opac-search-kicker { color: var(--opac-primary) !important; }
         .opac-hero-search {
-            background-image:
-                linear-gradient(rgba(255, 255, 255, .86), rgba(255, 255, 255, .86)),
-                url('{{ $opacBannerUrl }}') !important;
-            background-position: center !important;
-            background-size: cover !important;
+            background: linear-gradient(
+                160deg,
+                var(--opac-gradient-start) 0%,
+                var(--opac-gradient-end) 100%
+            ) !important;
         }
         .opac-search-btn,
         .opac-hero-search-btn {

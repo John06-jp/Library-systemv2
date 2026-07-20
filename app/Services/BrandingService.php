@@ -19,7 +19,6 @@ class BrandingService
 
     public const ASSET_FIELDS = [
         'banner_path',
-        'opac_banner_path',
         'opac_logo_path',
         'opac_default_book_cover_path',
         'sidebar_logo_path',
@@ -34,6 +33,8 @@ class BrandingService
         'primary_color',
         'secondary_color',
         'accent_color',
+        'opac_gradient_start_color',
+        'opac_gradient_end_color',
         'sidebar_background_color',
         'sidebar_text_color',
         'sidebar_brand_text_color',
@@ -50,7 +51,6 @@ class BrandingService
 
     private const UPLOAD_CONFIGURATION = [
         'banner_path' => ['type' => 'banner', 'directory' => 'branding/banners'],
-        'opac_banner_path' => ['type' => 'banner', 'directory' => 'branding/opac'],
         'opac_logo_path' => ['type' => 'logo', 'directory' => 'branding/opac'],
         'opac_default_book_cover_path' => ['type' => 'book_cover', 'directory' => 'branding/opac'],
         'sidebar_logo_path' => ['type' => 'logo', 'directory' => 'branding/logos'],

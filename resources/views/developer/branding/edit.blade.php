@@ -31,6 +31,9 @@
     .live-preview-button { border: 0; border-radius: 6px; color: #fff; padding: .45rem .8rem; font-size: .78rem; }
     .live-preview-status { display: inline-flex; align-items: center; gap: .35rem; color: #64748b; font-size: .78rem; }
     .live-preview-status::before { content: ''; width: 7px; height: 7px; border-radius: 999px; background: #22c55e; }
+    .opac-gradient-preview { min-height: 150px; display: grid; place-items: center; padding: 1.5rem; border-radius: 10px; color: #fff; text-align: center; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18); }
+    .opac-gradient-preview h6 { color: inherit; font-weight: 700; margin-bottom: .35rem; }
+    .opac-gradient-preview p { margin: 0; color: rgba(255, 255, 255, .85); font-size: .85rem; }
     .asset-preview-pending { outline: 3px solid #f59e0b; outline-offset: 2px; }
     @media (max-width: 767.98px) {
         .live-preview-layout { grid-template-columns: 1fr; }
@@ -91,33 +94,6 @@
                 </div>
                 <div class="col-md-4 d-flex align-items-end">
                     <button type="button" class="btn btn-outline-warning btn-sm" onclick="restoreField('banner_path')">Restore to Default</button>
-                </div>
-            </div>
-        </div>
-
-        {{-- === OPAC BANNER SECTION === --}}
-        <div class="branding-section">
-            <h5>OPAC Banner</h5>
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="fw-semibold small text-muted">Current OPAC Banner</label>
-                    <div class="preview-box mt-1">
-                        <img id="preview-asset-opac_banner_path" src="{{ app(App\Services\BrandingService::class)->assetUrl('opac_banner_path') }}" alt="Current OPAC Banner" class="preview-img-banner w-100">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label class="fw-semibold small text-muted">Original OPAC Banner</label>
-                    <div class="preview-box mt-1">
-                        <img src="{{ asset($originals['opac_banner_path']) }}" alt="Original OPAC Banner" class="preview-img-banner w-100">
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <label for="opac_banner_path" class="form-label">Upload New OPAC Banner</label>
-                    <input type="file" class="form-control form-control-sm" id="opac_banner_path" name="opac_banner_path" accept="image/png,image/jpeg,image/webp">
-                    <div class="form-text">PNG, JPG, or WebP. Max 5MB. Max 4000×2000px.</div>
-                </div>
-                <div class="col-md-4 d-flex align-items-end">
-                    <button type="button" class="btn btn-outline-warning btn-sm" onclick="restoreField('opac_banner_path')">Restore to Default</button>
                 </div>
             </div>
         </div>
@@ -232,6 +208,18 @@
         <div class="branding-section">
             <h5>Color Palette</h5>
 
+            <div class="mb-4">
+                <div class="fw-semibold mb-2">OPAC Gradient Preview</div>
+                <div id="opac-gradient-preview" class="opac-gradient-preview"
+                     style="background: linear-gradient(160deg, {{ $current['opac_gradient_start_color'] ?? '#2E7D32' }}, {{ $current['opac_gradient_end_color'] ?? '#1B5E20' }});">
+                    <div>
+                        <div class="small text-uppercase fw-semibold mb-1" style="letter-spacing:.12em;">Online Public Access Catalog</div>
+                        <h6>Find books in our library</h6>
+                        <p>Search by title, author, or keywords.</p>
+                    </div>
+                </div>
+            </div>
+
             {{-- Live Preview Mockup --}}
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <div>
@@ -329,6 +317,8 @@
                     'primary_color' => 'Primary Color',
                     'secondary_color' => 'Secondary Color',
                     'accent_color' => 'Accent Color',
+                    'opac_gradient_start_color' => 'OPAC Gradient Start',
+                    'opac_gradient_end_color' => 'OPAC Gradient End',
                     'sidebar_background_color' => 'Sidebar Background',
                     'sidebar_text_color' => 'Sidebar Text',
                     'sidebar_brand_text_color' => 'Sidebar Brand Text',
@@ -466,6 +456,8 @@
             primary: color('primary_color', '#2563EB'),
             secondary: color('secondary_color', '#475569'),
             accent: color('accent_color', '#F59E0B'),
+            opacGradientStart: color('opac_gradient_start_color', '#2E7D32'),
+            opacGradientEnd: color('opac_gradient_end_color', '#1B5E20'),
             sidebarBg: color('sidebar_background_color', '#1E293B'),
             sidebarText: color('sidebar_text_color', '#CBD5E1'),
             brandText: color('sidebar_brand_text_color', '#FFFFFF'),
@@ -500,6 +492,9 @@
         accent.style.borderLeft = '4px solid ' + colors.accent;
         accent.style.backgroundColor = colors.accent + '20';
         accent.style.color = colors.secondary;
+
+        document.getElementById('opac-gradient-preview').style.background =
+            'linear-gradient(160deg, ' + colors.opacGradientStart + ', ' + colors.opacGradientEnd + ')';
 
         var table = document.getElementById('live-preview-table');
         table.querySelector('thead').style.backgroundColor = colors.tableHeader;
@@ -554,7 +549,7 @@
             el.addEventListener('input', updatePreview);
         });
 
-        ['banner_path', 'opac_banner_path', 'opac_logo_path', 'opac_default_book_cover_path', 'sidebar_logo_path'].forEach(function (field) {
+        ['banner_path', 'opac_logo_path', 'opac_default_book_cover_path', 'sidebar_logo_path'].forEach(function (field) {
             var input = document.getElementById(field);
             if (input) input.addEventListener('change', function () { previewUploadedAsset(input); });
         });
