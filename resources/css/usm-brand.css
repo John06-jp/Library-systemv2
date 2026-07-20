@@ -1,0 +1,17 @@
+/*
+ * USM brand tokens — aligned with public/branding/branding.css and usm.edu.ph
+ * Primary palette: USM blue, USM green, gold accent
+ */
+:root {
+    --usm-blue: #1f4ea7;
+    --usm-blue-dark: #163a82;
+    --usm-green: #2e7d32;
+    --usm-green-accent: #4caf50;
+    --usm-gold: #ffd700;
+    --usm-gold-hover: #ffb845;
+    --usm-maroon: #932c27;
+    --usm-navy: #22333b;
+    --usm-footer: #1f4ea7;
+    --usm-page-bg: #f4f6f9;
+    --usm-text: #333333;
+}
