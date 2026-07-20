@@ -2,14 +2,18 @@ import { useShellProps } from '@/context/ShellPropsContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
+    Activity,
     BookOpen,
     ChevronRight,
     ClipboardCheck,
     Database,
     DoorOpen,
     FileBarChart,
+    History,
     Home,
+    LayoutDashboard,
     Library,
+    Palette,
     Shield,
 } from 'lucide-react';
 import {
@@ -18,6 +22,7 @@ import {
     isNavGroupActive,
     isNavItemActive,
 } from '@/config/adminNavigation';
+import { developerNavigation } from '@/config/developerNavigation';
 import {
     Collapsible,
     CollapsibleContent,
@@ -52,6 +57,10 @@ const iconMap = {
     Shield,
     DoorOpen,
     FileBarChart,
+    LayoutDashboard,
+    Palette,
+    Activity,
+    History,
 };
 
 const activeItemClass =
@@ -59,6 +68,23 @@ const activeItemClass =
 
 const navButtonClass =
     'rounded-md transition-[color,background-color,box-shadow,border-color] duration-150';
+
+function developerSidebarStyle(branding) {
+    if (!branding) {
+        return undefined;
+    }
+
+    return {
+        '--sidebar': branding.sidebar_background_color,
+        '--sidebar-foreground': branding.sidebar_text_color,
+        '--sidebar-primary': branding.sidebar_active_color,
+        '--sidebar-primary-foreground': '#FFFFFF',
+        '--sidebar-accent': branding.sidebar_hover_background_color,
+        '--sidebar-accent-foreground': branding.sidebar_hover_text_color,
+        '--sidebar-border': branding.sidebar_hover_background_color,
+        '--sidebar-ring': branding.sidebar_active_color,
+    };
+}
 
 function NavIcon({ name, active = false }) {
     const Icon = iconMap[name] ?? Home;
@@ -79,8 +105,65 @@ function closeMobileNav(isMobile, setOpenMobile) {
     }
 }
 
-function SidebarBrand() {
+function SidebarBrand({ isDeveloper = false }) {
     const { isMobile, setOpenMobile } = useSidebar();
+    const { shellBranding } = useShellProps();
+
+    if (isDeveloper) {
+        const branding = shellBranding ?? {};
+        const brandName = branding.sidebar_brand_name || 'Library System';
+        const brandSubtitle = branding.sidebar_brand_subtitle || '';
+        const logoUrl = branding.sidebar_logo_url || '/img/usm_logo_1954.png';
+
+        return (
+            <SidebarHeader className="relative overflow-hidden border-b border-sidebar-border/50 px-2 pb-3 pt-2">
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            size="lg"
+                            asChild
+                            className={cn(
+                                navButtonClass,
+                                'rounded-xl hover:bg-sidebar-accent/25 group-data-[collapsible=icon]:rounded-lg',
+                            )}
+                        >
+                            <a
+                                href="/developer/dashboard"
+                                onClick={() => closeMobileNav(isMobile, setOpenMobile)}
+                            >
+                                <div className="flex aspect-square size-9 shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-md ring-1 ring-sidebar-primary/40">
+                                    <img
+                                        src={logoUrl}
+                                        alt={brandName}
+                                        className="size-full rounded-full object-contain"
+                                    />
+                                </div>
+                                <div className="grid min-w-0 flex-1 text-left leading-tight group-data-[collapsible=icon]:hidden">
+                                    <span
+                                        className="truncate text-sm font-semibold tracking-tight"
+                                        style={{ color: branding.sidebar_brand_text_color }}
+                                    >
+                                        {brandName}
+                                    </span>
+                                    {brandSubtitle ? (
+                                        <span
+                                            className="truncate text-[11px]"
+                                            style={{ color: branding.sidebar_text_color }}
+                                        >
+                                            {brandSubtitle}
+                                        </span>
+                                    ) : null}
+                                    <span className="truncate text-[10px] font-medium uppercase tracking-[0.12em] text-sidebar-primary/90">
+                                        Developer portal
+                                    </span>
+                                </div>
+                            </a>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarHeader>
+        );
+    }
 
     return (
         <SidebarHeader className="relative overflow-hidden border-b border-sidebar-border/50 px-2 pb-3 pt-2">
@@ -132,7 +215,11 @@ function SidebarUserPanel() {
         return null;
     }
 
-    const roleLabel = user.isAdmin ? 'Administrator' : 'Staff';
+    const roleLabel = user.isDeveloper
+        ? 'Developer'
+        : user.isAdmin
+          ? 'Administrator'
+          : 'Staff';
 
     return (
         <SidebarFooter className="gap-2 border-t border-sidebar-border/50 p-2">
@@ -262,20 +349,27 @@ function NavGroup({ item, routeName, pathname }) {
 }
 
 export function AppSidebar({ ...props }) {
-    const { auth, routeName } = useShellProps();
+    const { auth, routeName, shellBranding } = useShellProps();
+    const isDeveloper = auth?.user?.isDeveloper ?? false;
     const isAdmin = auth?.user?.isAdmin ?? false;
     const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-    const navItems = filterNavigation(adminNavigation, isAdmin);
+    const navItems = isDeveloper
+        ? developerNavigation
+        : filterNavigation(adminNavigation, isAdmin);
 
     return (
-        <Sidebar collapsible="icon" {...props}>
-            <SidebarBrand />
+        <Sidebar
+            collapsible="icon"
+            style={isDeveloper ? developerSidebarStyle(shellBranding) : undefined}
+            {...props}
+        >
+            <SidebarBrand isDeveloper={isDeveloper} />
 
             <SidebarContent className="gap-0 overflow-x-hidden px-1.5 py-2">
                 <SidebarGroup className="p-0">
                     <SidebarGroupLabel className="mb-1 flex items-center gap-2 px-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-sidebar-foreground/55">
                         <span className="h-px flex-1 bg-sidebar-border/60" aria-hidden />
-                        Menu
+                        {isDeveloper ? 'Developer' : 'Menu'}
                         <span className="h-px flex-1 bg-sidebar-border/60" aria-hidden />
                     </SidebarGroupLabel>
                     <SidebarGroupContent>

@@ -57,6 +57,7 @@ class HandleInertiaRequests extends Middleware
                 'error' => fn () => $request->session()->get('error'),
             ],
             'adminActivity' => fn () => $shellProps['adminActivity'],
+            'shellBranding' => fn () => $shellProps['shellBranding'],
             'perPageOptions' => PerPage::options(),
         ];
     }

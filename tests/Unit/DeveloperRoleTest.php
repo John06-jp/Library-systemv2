@@ -5,7 +5,9 @@ namespace Tests\Unit;
 use App\Http\Middleware\EnsureDeveloper;
 use App\Models\User;
 use App\Services\Auth\ModuleAccessService;
+use App\Support\AdminShell;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Session\ArraySessionHandler;
 use Illuminate\Session\Store;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -62,6 +64,32 @@ class DeveloperRoleTest extends TestCase
             'staff' => ['staff'],
             'guest' => [null],
         ];
+    }
+
+    public function test_admin_shell_page_props_includes_developer_role_and_branding(): void
+    {
+        $user = new User([
+            'fname' => 'Dev',
+            'lname' => 'User',
+            'role' => 'developer',
+            'email' => 'developer@library.com',
+        ]);
+
+        $request = Request::create('/developer/dashboard', 'GET');
+        $request->setUserResolver(fn (): User => $user);
+
+        $route = (new Route('GET', '/developer/dashboard', fn () => null))->name('developer.dashboard');
+        $request->setRouteResolver(fn (): Route => $route);
+
+        $props = AdminShell::pageProps($request);
+
+        $this->assertTrue($props['auth']['user']['isDeveloper']);
+        $this->assertFalse($props['auth']['user']['isAdmin']);
+        $this->assertSame('developer.dashboard', $props['routeName']);
+        $this->assertArrayHasKey('shellBranding', $props);
+        $this->assertArrayHasKey('sidebar_logo_url', $props['shellBranding']);
+        $this->assertArrayHasKey('sidebar_brand_name', $props['shellBranding']);
+        $this->assertArrayHasKey('sidebar_background_color', $props['shellBranding']);
     }
 
     private function requestForRole(?string $role): Request

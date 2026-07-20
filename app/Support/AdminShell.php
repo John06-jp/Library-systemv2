@@ -4,6 +4,7 @@ namespace App\Support;
 
 use App\Models\AdminActivity;
 use App\Models\User;
+use App\Services\BrandingService;
 use Illuminate\Http\Request;
 
 class AdminShell
@@ -23,8 +24,34 @@ class AdminShell
             'email' => $user->email,
             'role' => $user->role,
             'isAdmin' => $user->role === 'admin',
+            'isDeveloper' => $user->role === 'developer',
             'initials' => $user->initials(),
             'avatarUrl' => $user->profilePictureUrl(),
+        ];
+    }
+
+    /**
+     * Branding snapshot for the developer portal sidebar.
+     *
+     * @return array<string, string>
+     */
+    public static function shellBranding(): array
+    {
+        /** @var BrandingService $service */
+        $service = app(BrandingService::class);
+        $active = $service->active();
+
+        return [
+            'sidebar_logo_url' => $service->assetUrl('sidebar_logo_path'),
+            'sidebar_brand_name' => (string) ($active['sidebar_brand_name'] ?? 'Library System'),
+            'sidebar_brand_subtitle' => (string) ($active['sidebar_brand_subtitle'] ?? ''),
+            'sidebar_background_color' => (string) ($active['sidebar_background_color'] ?? '#1E293B'),
+            'sidebar_text_color' => (string) ($active['sidebar_text_color'] ?? '#CBD5E1'),
+            'sidebar_brand_text_color' => (string) ($active['sidebar_brand_text_color'] ?? '#FFFFFF'),
+            'sidebar_active_color' => (string) ($active['sidebar_active_color'] ?? '#3B82F6'),
+            'sidebar_hover_background_color' => (string) ($active['sidebar_hover_background_color'] ?? '#334155'),
+            'sidebar_hover_text_color' => (string) ($active['sidebar_hover_text_color'] ?? '#F8FAFC'),
+            'sidebar_footer_background_color' => (string) ($active['sidebar_footer_background_color'] ?? '#1E293B'),
         ];
     }
 
@@ -85,6 +112,7 @@ class AdminShell
             ],
             'routeName' => $request->route()?->getName(),
             'adminActivity' => self::adminActivity($user),
+            'shellBranding' => self::shellBranding(),
         ];
     }
 }

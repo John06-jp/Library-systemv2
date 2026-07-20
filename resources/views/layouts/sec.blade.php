@@ -17,6 +17,7 @@
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/admin-shell.jsx'])
     <link rel="stylesheet" href="{{ asset('css/brand-typography.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="theme font-sans antialiased admin-page">
     <script type="application/json" id="admin-shell-props">

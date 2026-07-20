@@ -2,6 +2,8 @@ import { AppBreadcrumb } from '@/components/layout/AppBreadcrumb';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { resolveBreadcrumbs } from '@/config/adminNavigation';
+import { resolveDeveloperBreadcrumbs } from '@/config/developerNavigation';
+import { useShellProps } from '@/context/ShellPropsContext';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
@@ -11,7 +13,11 @@ export function AdminShellLayout({
     contentRef,
     children,
 }) {
-    const breadcrumbs = resolveBreadcrumbs(routeName, breadcrumbOverride);
+    const { auth } = useShellProps();
+    const isDeveloper = auth?.user?.isDeveloper ?? false;
+    const breadcrumbs = isDeveloper
+        ? resolveDeveloperBreadcrumbs(routeName, breadcrumbOverride)
+        : resolveBreadcrumbs(routeName, breadcrumbOverride);
 
     return (
         <TooltipProvider>

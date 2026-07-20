@@ -35,6 +35,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $this->command?->info('Database seeded: MARC framework, programs, students, attendance logs, feedback, books, test user (test@example.com).');
+        $this->call([
+            DeveloperSeeder::class,
+        ]);
+
+        $this->command?->info('Database seeded: MARC framework, programs, students, attendance logs, feedback, books, test user (test@example.com), developer user (developer@library.com).');
     }
 }

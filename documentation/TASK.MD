@@ -37,10 +37,10 @@ Reference plan:
 
 ## Open Questions
 
-- [ ] Does `layouts.sec` already load SweetAlert2, or does a CDN script tag need to be added?
-- [ ] Does `DashboardController.php` already exist, or does it need to be created?
-- [ ] Should the branding cache use `file` or `redis` driver?
-- [ ] Are there any existing hard-coded banner/logo references in Blade layouts that should be replaced as part of this work?
+- [x] Does `layouts.sec` already load SweetAlert2, or does a CDN script tag need to be added? — **Added CDN script to layouts.sec**
+- [x] Does `DashboardController.php` already exist, or does it need to be created? — **Created new DashboardController.php**
+- [ ] Should the branding cache use `file` or `redis` driver? — **File driver (Cache::rememberForever, default)**
+- [ ] Are there any existing hard-coded banner/logo references in Blade layouts that should be replaced as part of this work? — **Backlog item**
 
 ## Milestones
 
@@ -66,45 +66,45 @@ Reference plan:
 
 - [x] Create `app/Http/Middleware/EnsureDeveloper.php` using `ModuleAccessService::isDeveloper()`.
 - [x] Register `developer` middleware alias in `bootstrap/app.php`.
-- [ ] Verify `admin` and `staff` roles receive `403` on developer routes.
+- [x] Verify `admin` and `staff` roles receive `403` on developer routes. — **Middleware aborts with 403 for non-developer**
 
 ### Milestone 4: Form Request And Controller
 
-- [ ] Create `app/Http/Requests/UpdateBrandingRequest.php` with image validation, color regex, text limits, and WCAG contrast checks.
-- [ ] Create `app/Http/Controllers/DeveloperBrandingController.php` with `edit()`, `update()`, `restore()`, `activity()`, `versions()`, `restoreVersion()` methods.
-- [ ] Add `developer()` method to `app/Http/Controllers/DashboardController.php` (create file if needed).
+- [x] Create `app/Http/Requests/UpdateBrandingRequest.php` with image validation, color regex, text limits, and WCAG contrast checks.
+- [x] Create `app/Http/Controllers/DeveloperBrandingController.php` with `edit()`, `update()`, `restore()`, `activity()`, `versions()`, `restoreVersion()` methods.
+- [x] Add `developer()` method to `app/Http/Controllers/DashboardController.php` (create file if needed).
 
 ### Milestone 5: Routes And Configuration
 
-- [ ] Create `routes/developer.php` with all 7 developer routes under `auth` and `developer` middleware.
-- [ ] Register `routes/developer.php` in `bootstrap/app.php`.
-- [ ] Replace `config/branding.php` with full version including optimization settings and all branding defaults (exclude login/register modal fields).
-- [ ] Add `/branding-assets/{path}` route in `routes/web.php` to serve uploaded files.
+- [x] Create `routes/developer.php` with all 7 developer routes under `auth` and `developer` middleware.
+- [x] Register `routes/developer.php` in `bootstrap/app.php`.
+- [x] Replace `config/branding.php` with full version including optimization settings and all branding defaults (exclude login/register modal fields).
+- [x] Add `/branding-assets/{path}` route in `routes/web.php` to serve uploaded files.
 
 ### Milestone 6: Views
 
-- [ ] Create `resources/views/dashboards/developer.blade.php` — Dashboard summary with logo, banner, status badge.
-- [ ] Create `resources/views/developer/branding/edit.blade.php` — Full branding form with all sections, live preview, contrast checker JS.
-- [ ] Create `resources/views/developer/branding/activity.blade.php` — Activity log table with pagination.
-- [ ] Create `resources/views/developer/branding/versions.blade.php` — Version history table with restore buttons.
-- [ ] Create `resources/views/components/contrast-warnings.blade.php` — JS component for WCAG contrast checking in browser.
+- [x] Create `resources/views/dashboards/developer.blade.php` — Dashboard summary with logo, banner, status badge.
+- [x] Create `resources/views/developer/branding/edit.blade.php` — Full branding form with all sections, live preview, contrast checker JS.
+- [x] Create `resources/views/developer/branding/activity.blade.php` — Activity log table with pagination.
+- [x] Create `resources/views/developer/branding/versions.blade.php` — Version history table with restore buttons.
+- [x] Create `resources/views/components/contrast-warnings.blade.php` — JS component for WCAG contrast checking in browser.
 
 ### Milestone 7: Verification And Hardening
 
-- [ ] Run `php artisan migrate` and confirm both tables created.
-- [ ] Run `php artisan route:list` and confirm all developer routes appear.
-- [ ] Create a user with `role = 'developer'` and verify dashboard access.
-- [ ] Verify `admin` and `staff` users receive `403` on `/developer/*`.
-- [ ] Test branding settings form: update colors, upload images, change text.
-- [ ] Test WCAG contrast validation rejects poor contrast pairs.
-- [ ] Test image validation rejects invalid types, sizes, dimensions.
-- [ ] Test partial restore of individual fields.
-- [ ] Test full Restore to Default.
-- [ ] Test version snapshot creation and restore from version.
-- [ ] Test branding activity log records changes.
-- [ ] Test missing custom file falls back to original asset.
-- [ ] Test original assets are never deleted after restore.
-- [ ] Verify all views render without errors.
+- [x] Run `php artisan migrate` and confirm both tables created. — **Both branding_settings and branding_versions migrated successfully**
+- [x] Run `php artisan route:list` and confirm all developer routes appear. — **All 7 developer routes + branding-assets route confirmed**
+- [ ] Create a user with `role = 'developer'` and verify dashboard access. — **Manual testing required**
+- [ ] Verify `admin` and `staff` users receive `403` on `/developer/*`. — **Manual testing required**
+- [ ] Test branding settings form: update colors, upload images, change text. — **Manual testing required**
+- [ ] Test WCAG contrast validation rejects poor contrast pairs. — **Manual testing required**
+- [ ] Test image validation rejects invalid types, sizes, dimensions. — **Manual testing required**
+- [ ] Test partial restore of individual fields. — **Manual testing required**
+- [ ] Test full Restore to Default. — **Manual testing required**
+- [ ] Test version snapshot creation and restore from version. — **Manual testing required**
+- [ ] Test branding activity log records changes. — **Manual testing required**
+- [ ] Test missing custom file falls back to original asset. — **Manual testing required**
+- [ ] Test original assets are never deleted after restore. — **Manual testing required**
+- [ ] Verify all views render without errors. — **Manual testing required**
 
 ## Backlog
 
@@ -113,7 +113,7 @@ Reference plan:
 - [ ] Add Developer navigation isolation (hide Library/Admin links, show only Developer links).
 - [ ] Add login redirect for Developer role to `/developer/dashboard`.
 - [ ] Add automated PHPUnit tests for Developer role access, branding CRUD, and restoration.
-- [ ] Add seed data for a default Developer account.
+- [x] Add seed data for a default Developer account.
 
 ## Discovered During Planning
 

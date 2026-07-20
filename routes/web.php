@@ -43,6 +43,13 @@ use Carbon\Carbon;
 use App\Models\Book;
 
 // =============================
+// Branding Assets (serve uploaded files from storage)
+// =============================
+Route::get('/branding-assets/{path}', function (string $path) {
+    return response()->file(storage_path('app/public/branding/'.$path));
+})->where('path', '.*');
+
+// =============================
 // Public Routes
 // =============================
 Route::get('/design-system', function () {
